@@ -4,6 +4,7 @@ import {
   GetPostByIdParamsSchema,
   GetPostByIdResponseSchema,
   GetPostsResponseSchema,
+  PostPostResponseSchema,
 } from "./posts.schema";
 
 export default function postsRouter(server: FastifyInstance) {
@@ -49,5 +50,39 @@ export default function postsRouter(server: FastifyInstance) {
       },
     },
     postsController.getPostByIdController
+  );
+  server.post(
+    "/",
+    {
+      schema: {
+        tags: ["posts"],
+        summary: "Cria um novo post",
+        description: "Cria um novo post com os dados fornecidos",
+        body: {
+          type: "object",
+          required: ["title", "content", "author_name"],
+          properties: {
+            title: { type: "string" },
+            content: { type: "string" },
+            author_name: { type: "string" },
+          },
+        },
+        response: {
+          201: {
+            description: "Post criado com sucesso",
+            ...PostPostResponseSchema,
+          },
+          400: {
+            description: "Dados inválidos",
+            type: "object",
+            properties: {
+              status: { type: "string" },
+              message: { type: "string" },
+            },
+          },
+        },
+      },
+    },
+    postsController.createPostController
   );
 }

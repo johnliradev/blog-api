@@ -16,3 +16,4 @@ export const GetPostByIdParamsSchema = Type.Object({
   id: Type.Number(),
 });
 export const GetPostByIdResponseSchema = PostSchema;
+export const PostPostResponseSchema = PostSchema;

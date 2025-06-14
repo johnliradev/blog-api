@@ -7,3 +7,8 @@ export interface IPost {
   created_at: string;
   updated_at: string;
 }
+export interface CreatePostDTO {
+  title: string;
+  content: string;
+  author_name: string;
+}
