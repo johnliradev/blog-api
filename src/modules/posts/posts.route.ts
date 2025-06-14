@@ -1,7 +1,53 @@
 import { FastifyInstance } from "fastify";
 import * as postsController from "./posts.controller";
+import {
+  GetPostByIdParamsSchema,
+  GetPostByIdResponseSchema,
+  GetPostsResponseSchema,
+} from "./posts.schema";
 
 export default function postsRouter(server: FastifyInstance) {
-  server.get("/", postsController.getAllPostsController);
-  server.get("/:id", postsController.getPostByIdController);
+  server.get(
+    "/",
+    {
+      schema: {
+        tags: ["posts"],
+        summary: "Lista todos os posts",
+        description: "Retorna uma lista de todos os posts cadastrados",
+        response: {
+          200: {
+            description: "Lista de posts",
+            ...GetPostsResponseSchema,
+          },
+        },
+      },
+    },
+    postsController.getAllPostsController
+  );
+  server.get(
+    "/:id",
+    {
+      schema: {
+        tags: ["posts"],
+        summary: "Busca um post por ID",
+        description: "Retorna um post específico baseado no ID fornecido",
+        params: GetPostByIdParamsSchema,
+        response: {
+          200: {
+            description: "Post encontrado",
+            ...GetPostByIdResponseSchema,
+          },
+          404: {
+            description: "Post não encontrado",
+            type: "object",
+            properties: {
+              status: { type: "string" },
+              message: { type: "string" },
+            },
+          },
+        },
+      },
+    },
+    postsController.getPostByIdController
+  );
 }

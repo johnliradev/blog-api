@@ -4,6 +4,6 @@ export interface IPost {
   content: string;
   author_name: string;
   published: boolean;
-  created_at: Date;
-  updated_at: Date;
+  created_at: string;
+  updated_at: string;
 }
