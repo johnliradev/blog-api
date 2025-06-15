@@ -1,6 +1,10 @@
 import * as postRepository from "./posts.repository";
 import { CreatePostDTO, IPost } from "../../types/post-type";
-import { DatabaseError, PostValidationError } from "../../errors/AppError";
+import {
+  DatabaseError,
+  PostNotFoundError,
+  PostValidationError,
+} from "../../errors/AppError";
 
 export async function getAllPosts(): Promise<IPost[]> {
   try {
@@ -38,6 +42,13 @@ export async function createPost(data: CreatePostDTO): Promise<IPost> {
     }
 
     return await postRepository.create(data);
+  } catch (error) {
+    throw error;
+  }
+}
+export async function deletePost(id: number): Promise<void> {
+  try {
+    return await postRepository.remove(id);
   } catch (error) {
     throw error;
   }

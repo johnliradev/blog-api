@@ -53,3 +53,20 @@ export async function create(data: CreatePostDTO): Promise<IPost> {
     client.release();
   }
 }
+export async function remove(id: number): Promise<void> {
+  const client = await server.pg.connect();
+  try {
+    await findById(id);
+    const deleteQuery = "DELETE FROM posts WHERE id = $1";
+    await client.query(deleteQuery, [id]);
+  } catch (error) {
+    if (error instanceof PostNotFoundError) {
+      throw error;
+    }
+    throw new DatabaseError(
+      "Não foi possível deletar o post no banco de dados."
+    );
+  } finally {
+    client.release();
+  }
+}

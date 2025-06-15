@@ -1,11 +1,6 @@
 import { FastifyInstance } from "fastify";
 import * as postsController from "./posts.controller";
-import {
-  GetPostByIdParamsSchema,
-  GetPostByIdResponseSchema,
-  GetPostsResponseSchema,
-  PostPostResponseSchema,
-} from "./posts.schema";
+import * as postsSchema from "./posts.schema";
 
 export default function postsRouter(server: FastifyInstance) {
   server.get(
@@ -18,7 +13,7 @@ export default function postsRouter(server: FastifyInstance) {
         response: {
           200: {
             description: "Lista de posts",
-            ...GetPostsResponseSchema,
+            ...postsSchema.GetPostsResponseSchema,
           },
         },
       },
@@ -32,11 +27,11 @@ export default function postsRouter(server: FastifyInstance) {
         tags: ["posts"],
         summary: "Busca um post por ID",
         description: "Retorna um post específico baseado no ID fornecido",
-        params: GetPostByIdParamsSchema,
+        params: postsSchema.GetPostByIdParamsSchema,
         response: {
           200: {
             description: "Post encontrado",
-            ...GetPostByIdResponseSchema,
+            ...postsSchema.GetPostByIdResponseSchema,
           },
           404: {
             description: "Post não encontrado",
@@ -58,19 +53,11 @@ export default function postsRouter(server: FastifyInstance) {
         tags: ["posts"],
         summary: "Cria um novo post",
         description: "Cria um novo post com os dados fornecidos",
-        body: {
-          type: "object",
-          required: ["title", "content", "author_name"],
-          properties: {
-            title: { type: "string" },
-            content: { type: "string" },
-            author_name: { type: "string" },
-          },
-        },
+        body: postsSchema.CreatePostBodySchema,
         response: {
           201: {
             description: "Post criado com sucesso",
-            ...PostPostResponseSchema,
+            ...postsSchema.CreatePostResponseSchema,
           },
           400: {
             description: "Dados inválidos",
@@ -84,5 +71,30 @@ export default function postsRouter(server: FastifyInstance) {
       },
     },
     postsController.createPostController
+  );
+  server.delete(
+    "/:id",
+    {
+      schema: {
+        tags: ["posts"],
+        summary: "Deleta um post",
+        description: "Deleta um post específico baseado no ID fornecido",
+        params: postsSchema.DeletePostParamsSchema,
+        response: {
+          204: {
+            description: "Post deletado com sucesso",
+          },
+          404: {
+            description: "Post não encontrado",
+            type: "object",
+            properties: {
+              status: { type: "string" },
+              message: { type: "string" },
+            },
+          },
+        },
+      },
+    },
+    postsController.deletePostByIdController
   );
 }

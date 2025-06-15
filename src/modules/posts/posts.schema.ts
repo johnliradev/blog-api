@@ -16,4 +16,15 @@ export const GetPostByIdParamsSchema = Type.Object({
   id: Type.Number(),
 });
 export const GetPostByIdResponseSchema = PostSchema;
-export const PostPostResponseSchema = PostSchema;
+export const CreatePostResponseSchema = PostSchema;
+export const CreatePostBodySchema = Type.Object({
+  title: Type.String(),
+  content: Type.String(),
+  author_name: Type.String(),
+});
+export const DeletePostParamsSchema = Type.Object({
+  id: Type.Number(),
+});
+export const DeletePostResponseSchema = Type.Object({
+  message: Type.String(),
+});
