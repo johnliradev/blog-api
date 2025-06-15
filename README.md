@@ -66,6 +66,7 @@ A documentação completa da API está disponível em `/docs` quando o servidor 
 
 ### Posts
 
+- `GET /docs` - Documentação Swagger
 - `GET /posts` - Lista todos os posts
 - `GET /posts/:id` - Busca um post específico
 - `POST /posts` - Cria um novo post
