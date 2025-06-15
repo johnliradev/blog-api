@@ -6,6 +6,7 @@ import { errorHandler } from "./middlewares/errorHandler";
 import { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
 import fastifySwagger from "@fastify/swagger";
 import fastifySwaggerUi from "@fastify/swagger-ui";
+import fastifyCors from "@fastify/cors";
 import { swaggerOptions, swaggerUiOptions } from "./config/swagger";
 import pino from "pino";
 import { requestLogger } from "./middlewares/requestLogger";
@@ -27,7 +28,11 @@ export const server = fastify({
 
 server.register(fastifySwagger, swaggerOptions);
 server.register(fastifySwaggerUi, swaggerUiOptions);
-
+server.register(fastifyCors, {
+  origin: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+  credentials: true,
+});
 server.register(fastifyPostgres, {
   connectionString: process.env.DB_URL,
 });
