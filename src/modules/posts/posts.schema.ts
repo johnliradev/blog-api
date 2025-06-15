@@ -28,3 +28,13 @@ export const DeletePostParamsSchema = Type.Object({
 export const DeletePostResponseSchema = Type.Object({
   message: Type.String(),
 });
+export const UpdatePostParamsSchema = Type.Object({
+  id: Type.Number(),
+});
+export const UpdatePostBodySchema = Type.Object({
+  title: Type.Optional(Type.String()),
+  content: Type.Optional(Type.String()),
+  author_name: Type.Optional(Type.String()),
+  published: Type.Optional(Type.Boolean()),
+});
+export const UpdatePostResponseSchema = PostSchema;

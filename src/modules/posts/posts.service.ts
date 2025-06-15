@@ -1,5 +1,5 @@
 import * as postRepository from "./posts.repository";
-import { CreatePostDTO, IPost } from "../../types/post-type";
+import { CreatePostDTO, IPost, UpdatePostDTO } from "../../types/post-type";
 import {
   DatabaseError,
   PostNotFoundError,
@@ -49,6 +49,16 @@ export async function createPost(data: CreatePostDTO): Promise<IPost> {
 export async function deletePost(id: number): Promise<void> {
   try {
     return await postRepository.remove(id);
+  } catch (error) {
+    throw error;
+  }
+}
+export async function updatePost(
+  id: number,
+  data: UpdatePostDTO
+): Promise<IPost> {
+  try {
+    return await postRepository.update(id, data);
   } catch (error) {
     throw error;
   }

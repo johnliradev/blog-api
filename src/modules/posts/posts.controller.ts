@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import * as postsService from "./posts.service";
-import { CreatePostDTO } from "../../types/post-type";
+import { CreatePostDTO, UpdatePostDTO } from "../../types/post-type";
 
 export async function getAllPostsController(
   request: FastifyRequest,
@@ -30,4 +30,13 @@ export async function deletePostByIdController(
   const { id } = request.params;
   await postsService.deletePost(Number(id));
   return reply.code(204).send();
+}
+export async function updatePostByIdController(
+  request: FastifyRequest<{ Params: { id: string }; Body: UpdatePostDTO }>,
+  reply: FastifyReply
+) {
+  const { id } = request.params;
+  const data = request.body;
+  const updatedPost = await postsService.updatePost(Number(id), data);
+  return reply.code(202).send(updatedPost);
 }

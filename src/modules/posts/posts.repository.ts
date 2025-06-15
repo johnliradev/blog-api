@@ -1,5 +1,5 @@
 import { server } from "../../server";
-import { CreatePostDTO, IPost } from "../../types/post-type";
+import { CreatePostDTO, IPost, UpdatePostDTO } from "../../types/post-type";
 import { DatabaseError, PostNotFoundError } from "../../errors/AppError";
 
 export async function findAll(): Promise<IPost[]> {
@@ -65,6 +65,53 @@ export async function remove(id: number): Promise<void> {
     }
     throw new DatabaseError(
       "Não foi possível deletar o post no banco de dados."
+    );
+  } finally {
+    client.release();
+  }
+}
+
+export async function update(id: number, data: UpdatePostDTO): Promise<IPost> {
+  const client = await server.pg.connect();
+  try {
+    await findById(id);
+    const fields = [];
+    const values = [];
+    let index = 1;
+
+    for (const [key, value] of Object.entries(data)) {
+      if (value !== undefined) {
+        fields.push(`${key} = $${index}`);
+        values.push(value);
+        index++;
+      }
+    }
+
+    if (fields.length === 0) {
+      throw new DatabaseError("Nenhum campo para atualizar.");
+    }
+
+    const query = `
+      UPDATE posts
+      SET ${fields.join(", ")}
+      WHERE id = $${index}
+      RETURNING *
+    `;
+    values.push(id);
+
+    const result = await client.query(query, values);
+
+    if (result.rows.length === 0) {
+      throw new PostNotFoundError(`Post com ID ${id} não encontrado`);
+    }
+
+    return result.rows[0] as IPost;
+  } catch (error) {
+    if (error instanceof PostNotFoundError) {
+      throw error;
+    }
+    throw new DatabaseError(
+      "Não foi possível atualizar o post no banco de dados."
     );
   } finally {
     client.release();

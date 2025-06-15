@@ -12,3 +12,9 @@ export interface CreatePostDTO {
   content: string;
   author_name: string;
 }
+export interface UpdatePostDTO {
+  title?: string;
+  content?: string;
+  author_name?: string;
+  published?: boolean;
+}

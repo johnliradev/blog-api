@@ -97,4 +97,31 @@ export default function postsRouter(server: FastifyInstance) {
     },
     postsController.deletePostByIdController
   );
+  server.patch(
+    "/:id",
+    {
+      schema: {
+        tags: ["posts"],
+        summary: "Atualiza um post",
+        description: "Atualiza um post específico baseado no ID fornecido",
+        params: postsSchema.UpdatePostParamsSchema,
+        body: postsSchema.UpdatePostBodySchema,
+        response: {
+          202: {
+            description: "Post atualizado com sucesso",
+            ...postsSchema.UpdatePostResponseSchema,
+          },
+          404: {
+            description: "Post não encontrado",
+            type: "object",
+            properties: {
+              status: { type: "string" },
+              message: { type: "string" },
+            },
+          },
+        },
+      },
+    },
+    postsController.updatePostByIdController
+  );
 }
