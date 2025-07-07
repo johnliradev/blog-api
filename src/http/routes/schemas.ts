@@ -70,3 +70,52 @@ export const getAllArticlesSchema = {
     },
   },
 };
+export const deleteArticleSchema = {
+  params: {
+    type: "object",
+    properties: {
+      id: { type: "string" },
+    },
+    required: ["id"],
+  },
+  response: {
+    200: {
+      type: "object",
+      properties: {
+        message: { type: "string" },
+      },
+      required: ["message"],
+    },
+  },
+};
+export const getArticleByIdSchema = {
+  params: {
+    type: "object",
+    properties: {
+      id: { type: "string" },
+    },
+    required: ["id"],
+  },
+  response: {
+    200: {
+      type: "object",
+      properties: {
+        article: {
+          type: "object",
+          properties: {
+            id: { type: "string" },
+            title: { type: "string" },
+            content: { type: "string" },
+            createdAt: { type: "string", format: "date-time" },
+            tags: {
+              type: "array",
+              items: { type: "string" },
+            },
+          },
+          required: ["id", "title", "content", "createdAt", "tags"],
+        },
+      },
+      required: ["article"],
+    },
+  },
+};

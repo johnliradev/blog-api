@@ -1,5 +1,7 @@
 import { Article, CreateArticleSchema } from "./types";
 import { getArticlesCollection } from "../lib/database";
+import { ObjectId } from "@fastify/mongodb";
+import { NotFoundError } from "../http/errors/errors";
 
 export const repository = {
   getAll: async (): Promise<Article[]> => {
@@ -11,6 +13,21 @@ export const repository = {
       createdAt: a.createdAt,
       tags: a.tags || [],
     }));
+  },
+  getById: async (id: string): Promise<Article> => {
+    const article = await getArticlesCollection().findOne({
+      _id: new ObjectId(id),
+    });
+    if (!article) {
+      throw new NotFoundError("Article not found");
+    }
+    return {
+      id: article._id.toString(),
+      title: article.title,
+      content: article.content,
+      createdAt: article.createdAt,
+      tags: article.tags || [],
+    };
   },
   create: async (data: CreateArticleSchema): Promise<Article> => {
     const now = new Date();
@@ -27,5 +44,8 @@ export const repository = {
       createdAt: now,
       tags: data.tags || [],
     };
+  },
+  delete: async (id: string): Promise<void> => {
+    await getArticlesCollection().deleteOne({ _id: new ObjectId(id) });
   },
 };
