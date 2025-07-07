@@ -1,4 +1,4 @@
-import { Article } from "./types";
+import { Article, CreateArticleSchema } from "./types";
 import { getArticlesCollection } from "../lib/database";
 
 export const repository = {
@@ -8,17 +8,24 @@ export const repository = {
       id: a._id.toString(),
       title: a.title,
       content: a.content,
+      createdAt: a.createdAt,
+      tags: a.tags || [],
     }));
   },
-  create: async (title: string, content: string): Promise<Article> => {
+  create: async (data: CreateArticleSchema): Promise<Article> => {
+    const now = new Date();
     const article = await getArticlesCollection().insertOne({
-      title: title,
-      content: content,
+      title: data.title,
+      content: data.content,
+      tags: data.tags || [],
+      createdAt: now,
     });
     return {
       id: article.insertedId.toString(),
-      title: title,
-      content: content,
+      title: data.title,
+      content: data.content,
+      createdAt: now,
+      tags: data.tags || [],
     };
   },
 };
