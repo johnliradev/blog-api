@@ -2,7 +2,7 @@ import fastify from "fastify";
 import cors from "@fastify/cors";
 import mongodb from "@fastify/mongodb";
 import "dotenv/config";
-import { Router } from "../http/routes";
+import { Router } from "../http/routes/routes";
 import { errorHandler } from "../http/errors/errorHandler";
 
 const app = fastify({ logger: true });

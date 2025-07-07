@@ -1,4 +1,3 @@
-import { FastifyReply, FastifyRequest } from "fastify";
 import { app } from "../lib/fastify";
 
 app.listen({ port: 3000 }, function (err, address) {
@@ -7,7 +6,4 @@ app.listen({ port: 3000 }, function (err, address) {
     process.exit(1);
   }
   console.log(`Server is running at ${address}`);
-});
-app.get("/", (request: FastifyRequest, reply: FastifyReply) => {
-  reply.send({ message: "Hello, World!" });
 });
