@@ -1,9 +1,9 @@
 import { FastifyReply, FastifyRequest } from "fastify";
+
 import { services } from "./services";
 import { CreateArticleSchema } from "./types";
 import { ValidationError } from "../http/errors/errors";
 import { ObjectId } from "@fastify/mongodb";
-
 export const controller = {
   getAll: async (
     request: FastifyRequest,
@@ -29,6 +29,46 @@ export const controller = {
     reply.status(200).send({
       article,
     });
+  },
+  getByDateRange: async (
+    request: FastifyRequest,
+    reply: FastifyReply
+  ): Promise<void> => {
+    const { start, end } = request.query as { start: string; end: string };
+    if (!start || !end) {
+      throw new ValidationError(
+        "Both start and end dates must be provided as query parameters"
+      );
+    }
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+      throw new ValidationError("Invalid date format for start or end");
+    }
+    const articles = await services.getByDataRange(startDate, endDate);
+    reply.status(200).send({
+      articles,
+    });
+  },
+  getByTags: async (
+    request: FastifyRequest,
+    reply: FastifyReply
+  ): Promise<void> => {
+    const { tags } = request.query as { tags: string };
+    if (!tags) {
+      throw new ValidationError(
+        "Tags must be provided as a comma-separated list in the query string"
+      );
+    }
+    const tagsArray = tags
+      .split(",")
+      .map((t) => t.trim())
+      .filter(Boolean);
+    if (tagsArray.length === 0) {
+      throw new ValidationError("At least one tag must be provided");
+    }
+    const articles = await services.getByTags(tagsArray);
+    reply.status(200).send({ articles });
   },
   create: async (
     request: FastifyRequest,

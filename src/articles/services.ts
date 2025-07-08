@@ -14,6 +14,12 @@ export const services = {
     }
     return article;
   },
+  getByDataRange: async (start: Date, end: Date): Promise<Article[]> => {
+    return await repository.getByDateRange(start, end);
+  },
+  getByTags: async (tags: string[]): Promise<Article[]> => {
+    return await repository.getByTags(tags);
+  },
   create: async (data: CreateArticleSchema): Promise<Article> => {
     const article = await repository.create(data);
     return article;

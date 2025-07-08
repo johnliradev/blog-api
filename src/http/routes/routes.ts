@@ -6,6 +6,8 @@ import {
   getAllArticlesSchema,
   getArticleByIdSchema,
   updateArticleSchema,
+  getArticlesByDateRangeSchema,
+  getArticlesByTagsSchema,
 } from "./schemas";
 
 export const Router = (app: FastifyInstance) => {
@@ -26,4 +28,14 @@ export const Router = (app: FastifyInstance) => {
       { schema: updateArticleSchema },
       controller.update
     );
+  app.get(
+    "/articles/by-date-range",
+    { schema: getArticlesByDateRangeSchema },
+    controller.getByDateRange
+  );
+  app.get(
+    "/articles/by-tags",
+    { schema: getArticlesByTagsSchema },
+    controller.getByTags
+  );
 };

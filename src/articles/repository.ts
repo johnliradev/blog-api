@@ -29,6 +29,32 @@ export const repository = {
       tags: article.tags || [],
     };
   },
+  getByDateRange: async (start: Date, end: Date): Promise<Article[]> => {
+    const articles = await getArticlesCollection()
+      .find({
+        createdAt: { $gte: start, $lte: end },
+      })
+      .toArray();
+    return articles.map((a) => ({
+      id: a._id.toString(),
+      title: a.title,
+      content: a.content,
+      createdAt: a.createdAt,
+      tags: a.tags || [],
+    }));
+  },
+  getByTags: async (tags: string[]): Promise<Article[]> => {
+    const articles = await getArticlesCollection()
+      .find({ tags: { $all: tags } })
+      .toArray();
+    return articles.map((a) => ({
+      id: a._id.toString(),
+      title: a.title,
+      content: a.content,
+      createdAt: a.createdAt,
+      tags: a.tags || [],
+    }));
+  },
   create: async (data: CreateArticleSchema): Promise<Article> => {
     const now = new Date();
     const article = await getArticlesCollection().insertOne({

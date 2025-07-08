@@ -164,3 +164,48 @@ export const updateArticleSchema = {
     },
   },
 };
+export const getArticlesByDateRangeSchema = {
+  querystring: {
+    type: "object",
+    required: ["start", "end"],
+    properties: {
+      start: { type: "string", format: "date-time" },
+      end: { type: "string", format: "date-time" },
+    },
+  },
+  response: {
+    200: {
+      type: "object",
+      properties: {
+        articles: {
+          type: "array",
+          items: {
+            type: "object",
+            properties: {
+              id: { type: "string" },
+              title: { type: "string" },
+              content: { type: "string" },
+              createdAt: { type: "string", format: "date-time" },
+              tags: {
+                type: "array",
+                items: { type: "string" },
+              },
+            },
+            required: ["id", "title", "content", "createdAt", "tags"],
+          },
+        },
+      },
+      required: ["articles"],
+    },
+  },
+};
+export const getArticlesByTagsSchema = {
+  querystring: {
+    type: "object",
+    required: ["tags"],
+    properties: {
+      tags: { type: "string" },
+    },
+  },
+  response: getAllArticlesSchema.response,
+};
