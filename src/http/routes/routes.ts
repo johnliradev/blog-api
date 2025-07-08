@@ -5,6 +5,7 @@ import {
   deleteArticleSchema,
   getAllArticlesSchema,
   getArticleByIdSchema,
+  updateArticleSchema,
 } from "./schemas";
 
 export const Router = (app: FastifyInstance) => {
@@ -19,5 +20,10 @@ export const Router = (app: FastifyInstance) => {
       "/articles/:id",
       { schema: deleteArticleSchema },
       controller.delete
+    ),
+    app.put(
+      "/articles/:id",
+      { schema: updateArticleSchema },
+      controller.update
     );
 };

@@ -57,4 +57,22 @@ export const controller = {
       message: "Article deleted successfully",
     });
   },
+  update: async (
+    request: FastifyRequest,
+    reply: FastifyReply
+  ): Promise<void> => {
+    const { id } = request.params as { id: string };
+    if (!id) {
+      throw new ValidationError("ID must be inserted in URL");
+    }
+    if (!ObjectId.isValid(id)) {
+      throw new ValidationError("Invalid article ID format");
+    }
+    const { title, content, tags } = request.body as CreateArticleSchema;
+    const article = await services.update(id, { title, content, tags });
+    reply.status(201).send({
+      message: "Article updated successfully",
+      article: article,
+    });
+  },
 };

@@ -48,4 +48,29 @@ export const repository = {
   delete: async (id: string): Promise<void> => {
     await getArticlesCollection().deleteOne({ _id: new ObjectId(id) });
   },
+  update: async (id: string, data: CreateArticleSchema): Promise<Article> => {
+    await getArticlesCollection().updateOne(
+      { _id: new ObjectId(id) },
+      {
+        $set: {
+          title: data.title,
+          content: data.content,
+          tags: data.tags,
+        },
+      }
+    );
+    const updated = await getArticlesCollection().findOne({
+      _id: new ObjectId(id),
+    });
+    if (!updated) {
+      throw new NotFoundError("Article not found");
+    }
+    return {
+      id: updated._id.toString(),
+      title: updated.title,
+      content: updated.content,
+      createdAt: updated.createdAt,
+      tags: updated.tags || [],
+    };
+  },
 };

@@ -25,4 +25,11 @@ export const services = {
     }
     return await repository.delete(id);
   },
+  update: async (id: string, data: CreateArticleSchema): Promise<Article> => {
+    const article = await repository.getById(id);
+    if (!article) {
+      throw new NotFoundError("Article not found");
+    }
+    return await repository.update(id, data);
+  },
 };
