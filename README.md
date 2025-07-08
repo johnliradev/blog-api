@@ -24,17 +24,6 @@ Uma API RESTful para gerenciamento de artigos de blog, construída com Node.js, 
 | GET    | `/articles/by-date-range` | Busca artigos por intervalo de datas      |
 | GET    | `/articles/by-tags`       | Busca artigos por tags (ex: ?tags=js,api) |
 
-## Exemplo de Artigo
-
-```json
-{
-  "id": "64f1c2e7b2e4a2a1b8c1d2e3",
-  "title": "Meu Primeiro Post",
-  "content": "Conteúdo do artigo...",
-  "createdAt": "2024-08-10T12:00:00.000Z",
-  "tags": ["javascript", "api"]
-}
-```
 
 ## Como rodar o projeto
 
@@ -87,21 +76,5 @@ src/
     database.ts
     fastify.ts
 ```
-
-Se quiser personalizar algum trecho (ex: instruções de deploy, exemplos de uso, variáveis de ambiente), só avisar!
-
-## Melhorias Futuras
-
-- Autenticação e autorização de usuários
-- Paginação nas listagens
-- Testes automatizados
-- Documentação automática (Swagger/OpenAPI)
-- Deploy em nuvem
-
-## Contribuição
-
-Pull requests são bem-vindos! Para grandes mudanças, abra uma issue primeiro para discutir o que você gostaria de modificar.
-
----
 
 **Licença:** MIT
